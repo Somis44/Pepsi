@@ -11,11 +11,11 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -24,7 +24,7 @@
         if(isset($_SESSION["success"])){
             echo <<< SUCCESS
                 <div class="callout callout-success">
-                    <h5>Gratulacje!</h5>
+                    <h5>You are logged in</h5>
                     <p>$_SESSION[success]</p>
                 </div>
             SUCCESS;
@@ -36,7 +36,7 @@
     if(isset($_SESSION["error"])){
         echo <<< SUCCESS
                 <div class="callout callout-danger">
-                    <h5>Błąd!</h5>
+                    <h5>Errro!</h5>
                     <p>$_SESSION[error]</p>
                 </div>
             SUCCESS;
@@ -46,7 +46,7 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="./index-test.php" class="h1"><b>Mono</b>Bank</a>
+      <a href="login.php" class="h1"><b>Mono</b>Bank</a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
@@ -86,10 +86,10 @@
       </form>
 
       <p class="mb-1">
-        <a href="recover-password-v2.php">I forgot my password</a>
+        <a href="recover-password.php">I forgot my password</a>
       </p>
       <p class="mb-0">
-        <a href="register-v2.php" class="text-center">Register a new membership</a>
+        <a href="register.php" class="text-center">Register a new membership</a>
       </p>
     </div>
     <!-- /.card-body -->
@@ -99,10 +99,10 @@
 <!-- /.login-box -->
 
 <!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
+<script src="../dist/js/adminlte.min.js"></script>
 </body>
 </html>

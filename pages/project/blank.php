@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_SESSION['session_id']) {
+    $_SESSION["error"] = "Please login";
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,8 +51,8 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index3.html" class="brand-link">
-        <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="blank.php" class="brand-link">
+        <img src="../dist/img/M-logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight">MONObank</span>
     </a>
 
@@ -52,10 +61,10 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="../dist/img/user.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Users Name</a>
+          <a href="#" class="d-block"><?php echo $_SESSION['firstName']," ",$_SESSION['lastName'];?></a>
         </div>
       </div>
 
@@ -75,7 +84,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="login.php" class="nav-link">
+                <a href="../../scripts/logout.php" class="nav-link">
                     <i class="nav-icon far fa-circle text-danger"></i>
                     <p>Logout</p>
                 </a>

@@ -33,7 +33,7 @@ ERROR;
     ?>
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="register.php" class="h1"><b>Admin</b>LTE</a>
+            <a href="register.php" class="h1"><b>MONO</b>bank</a>
         </div>
         <div class="card-body">
             <p class="login-box-msg">Create an account</p>
@@ -94,7 +94,16 @@ ERROR;
                 </div>
 
                 <div class="input-group mb-3">
-                    <input type="number" class="form-control" placeholder="Type city ID" name="city_id">
+                    <select class="form-control" name="city_id">
+                        <?php
+                            require_once "../../scripts/connect.php";
+                            $sql ="SELECT * FROM cities";
+                            $result = $conn->query($sql);
+                            while($city = $result->fetch_assoc()){
+                                echo "<option value='$city[id]'>$city[city]</option>";
+                            }
+                        ?>
+                    </select>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -127,17 +136,6 @@ ERROR;
                     <!-- /.col -->
                 </div>
             </form>
-
-            <div class="social-auth-links text-center">
-                <a href="#" class="btn btn-block btn-primary">
-                    <i class="fab fa-facebook mr-2"></i>
-                    Sign up using Facebook
-                </a>
-                <a href="#" class="btn btn-block btn-danger">
-                    <i class="fab fa-google-plus mr-2"></i>
-                    Sign up using Google+
-                </a>
-            </div>
 
             <a href="login.php" class="text-center">I already have a membership</a>
         </div>

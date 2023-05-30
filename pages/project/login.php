@@ -1,5 +1,10 @@
 <?php
     session_start();
+
+if (isset($_SESSION['loggedin']) && session_status() == 2 && session_id() == $_SESSION["session_id"]) {
+    header('Location: ./blank.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,13 +26,19 @@
 <div class="login-box">
 
     <?php
-        if(isset($_SESSION["success"])){
+        if(isset($_SESSION["success"]) || isset($_GET["logout"])){
             echo <<< SUCCESS
                 <div class="callout callout-success">
-                    <h5>You are logged in</h5>
-                    <p>$_SESSION[success]</p>
+    SUCCESS;
+                if(isset($_SESSION["success"]))
+                    echo "<p>$_SESSION[success]</p>";
+
+                if(isset($_GET["logout"]))
+                    echo "<p>You'r was loged out</p>";
+
+                echo <<< SUCCESS
                 </div>
-            SUCCESS;
+    SUCCESS;
         unset($_SESSION["success"]);
         }
     ?>
@@ -36,7 +47,7 @@
     if(isset($_SESSION["error"])){
         echo <<< SUCCESS
                 <div class="callout callout-danger">
-                    <h5>Errro!</h5>
+                    <h5>Error!</h5>
                     <p>$_SESSION[error]</p>
                 </div>
             SUCCESS;

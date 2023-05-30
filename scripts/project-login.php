@@ -4,13 +4,13 @@ require_once "./connect.php";
 
 if (!isset($_POST['email'], $_POST['pass'])) {
     // Could not get the data that should have been sent.
-    $_SESSION['error'] = "Wypełnij wszystkie pola!";
+    $_SESSION['error'] = "Fill in all fields!";
     echo "<script>history.back();</script>";
     exit();
 }
 
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-if ($stmt = $conn->prepare('SELECT id, firstName, lastName, password FROM users WHERE email = ?')) {
+if ($stmt = $conn->prepare('SELECT id, firstName, lastName, password FROM user WHERE email = ?')) {
     // Bind parameters (s = string, i = int, b = blob, etc), in our case the username is a string so we use "s"
     $stmt->bind_param('s', $_POST['email']);
     $stmt->execute();
@@ -36,14 +36,14 @@ if ($stmt = $conn->prepare('SELECT id, firstName, lastName, password FROM users 
             header('Location: ../pages/project/blank.php');
         } else {
             // Incorrect password
-            $_SESSION['error'] = "Błędnie podane adres e-mail lub hasło";
+            $_SESSION['error'] = "Incorrect e-mail address or password";
             echo "<script>history.back();</script>";
             exit();
             //echo 'Incorrect username and/or password!';
         }
     } else {
         // Incorrect username
-        $_SESSION['error'] = "Błędnie podany adres e-mail lub hasło";
+        $_SESSION['error'] = "Incorrect e-mail address or password";
         echo "<script>history.back();</script>";
         exit();
         //echo 'Incorrect username and/or password!';

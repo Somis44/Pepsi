@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Май 29 2023 г., 13:55
--- Версия сервера: 10.4.27-MariaDB
--- Версия PHP: 8.2.0
+-- Час створення: Трв 30 2023 р., 12:19
+-- Версія сервера: 10.4.27-MariaDB
+-- Версія PHP: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,37 +18,44 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `mono_bank`
+-- База даних: `mono_bank`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `balance`
+-- Структура таблиці `balance`
 --
 
 CREATE TABLE `balance` (
   `account_id` int(10) UNSIGNED NOT NULL,
-  `balance` decimal(15,2) NOT NULL
+  `balance` decimal(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Дамп даних таблиці `balance`
+--
+
+INSERT INTO `balance` (`account_id`, `balance`) VALUES
+(23, '1000.00');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `cities`
+-- Структура таблиці `cities`
 --
 
 CREATE TABLE `cities` (
-  `Id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `state_id` int(10) UNSIGNED NOT NULL,
   `city` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Дамп данных таблицы `cities`
+-- Дамп даних таблиці `cities`
 --
 
-INSERT INTO `cities` (`Id`, `state_id`, `city`) VALUES
+INSERT INTO `cities` (`id`, `state_id`, `city`) VALUES
 (1, 2, 'Poznań'),
 (2, 2, 'Lublin'),
 (3, 1, 'Kyiv'),
@@ -58,19 +65,19 @@ INSERT INTO `cities` (`Id`, `state_id`, `city`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `countries`
+-- Структура таблиці `countries`
 --
 
 CREATE TABLE `countries` (
-  `Id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `country` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Дамп данных таблицы `countries`
+-- Дамп даних таблиці `countries`
 --
 
-INSERT INTO `countries` (`Id`, `country`) VALUES
+INSERT INTO `countries` (`id`, `country`) VALUES
 (1, 'Poland'),
 (2, 'Ukraine'),
 (3, 'Albania');
@@ -78,7 +85,7 @@ INSERT INTO `countries` (`Id`, `country`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `history`
+-- Структура таблиці `history`
 --
 
 CREATE TABLE `history` (
@@ -92,7 +99,7 @@ CREATE TABLE `history` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `roles`
+-- Структура таблиці `roles`
 --
 
 CREATE TABLE `roles` (
@@ -100,10 +107,19 @@ CREATE TABLE `roles` (
   `role` enum('user','moderator','administrator') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Дамп даних таблиці `roles`
+--
+
+INSERT INTO `roles` (`id`, `role`) VALUES
+(1, 'user'),
+(2, 'moderator'),
+(3, 'administrator');
+
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `states`
+-- Структура таблиці `states`
 --
 
 CREATE TABLE `states` (
@@ -113,7 +129,7 @@ CREATE TABLE `states` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Дамп данных таблицы `states`
+-- Дамп даних таблиці `states`
 --
 
 INSERT INTO `states` (`id`, `country_id`, `state`) VALUES
@@ -126,11 +142,11 @@ INSERT INTO `states` (`id`, `country_id`, `state`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `user`
+-- Структура таблиці `user`
 --
 
 CREATE TABLE `user` (
-  `Id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `city_id` int(10) UNSIGNED NOT NULL,
   `role_id` tinyint(4) NOT NULL DEFAULT 1,
   `account` int(20) NOT NULL,
@@ -143,30 +159,37 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Индексы сохранённых таблиц
+-- Дамп даних таблиці `user`
+--
+
+INSERT INTO `user` (`id`, `city_id`, `role_id`, `account`, `email`, `firstName`, `lastName`, `birthday`, `password`, `created_at`) VALUES
+(23, 2, 1, 1120757, 'kiril@zlotnyk.com', 'Kyryl', 'Zlotnyk', '2023-05-09', '$argon2id$v=19$m=65536,t=4,p=1$TFVsM0R0S2UzTGZGOGcyTQ$U2ZHhD7CviD75b7FRivFLdleGBopPTVcGGJM556XYxg', '2023-05-30 12:00:33');
+
+--
+-- Індекси збережених таблиць
 --
 
 --
--- Индексы таблицы `balance`
+-- Індекси таблиці `balance`
 --
 ALTER TABLE `balance`
   ADD PRIMARY KEY (`account_id`);
 
 --
--- Индексы таблицы `cities`
+-- Індекси таблиці `cities`
 --
 ALTER TABLE `cities`
-  ADD PRIMARY KEY (`Id`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `state_id` (`state_id`);
 
 --
--- Индексы таблицы `countries`
+-- Індекси таблиці `countries`
 --
 ALTER TABLE `countries`
-  ADD PRIMARY KEY (`Id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `history`
+-- Індекси таблиці `history`
 --
 ALTER TABLE `history`
   ADD PRIMARY KEY (`id`),
@@ -174,105 +197,106 @@ ALTER TABLE `history`
   ADD KEY `recipient_id` (`recipient_id`);
 
 --
--- Индексы таблицы `roles`
+-- Індекси таблиці `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `states`
+-- Індекси таблиці `states`
 --
 ALTER TABLE `states`
   ADD PRIMARY KEY (`id`),
   ADD KEY `country_id` (`country_id`);
 
 --
--- Индексы таблицы `user`
+-- Індекси таблиці `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`Id`),
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `city_id` (`city_id`,`role_id`),
   ADD KEY `role_id` (`role_id`),
   ADD KEY `account` (`account`);
 
 --
--- AUTO_INCREMENT для сохранённых таблиц
+-- AUTO_INCREMENT для збережених таблиць
 --
 
 --
--- AUTO_INCREMENT для таблицы `balance`
+-- AUTO_INCREMENT для таблиці `balance`
 --
 ALTER TABLE `balance`
-  MODIFY `account_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `account_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT для таблицы `cities`
+-- AUTO_INCREMENT для таблиці `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `Id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT для таблицы `countries`
+-- AUTO_INCREMENT для таблиці `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `Id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT для таблицы `history`
+-- AUTO_INCREMENT для таблиці `history`
 --
 ALTER TABLE `history`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `roles`
+-- AUTO_INCREMENT для таблиці `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT для таблицы `states`
+-- AUTO_INCREMENT для таблиці `states`
 --
 ALTER TABLE `states`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT для таблицы `user`
+-- AUTO_INCREMENT для таблиці `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- Ограничения внешнего ключа сохраненных таблиц
+-- Обмеження зовнішнього ключа збережених таблиць
 --
 
 --
--- Ограничения внешнего ключа таблицы `balance`
+-- Обмеження зовнішнього ключа таблиці `balance`
 --
 ALTER TABLE `balance`
   ADD CONSTRAINT `balance_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `user` (`Id`);
 
 --
--- Ограничения внешнего ключа таблицы `cities`
+-- Обмеження зовнішнього ключа таблиці `cities`
 --
 ALTER TABLE `cities`
   ADD CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`state_id`) REFERENCES `states` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `history`
+-- Обмеження зовнішнього ключа таблиці `history`
 --
 ALTER TABLE `history`
   ADD CONSTRAINT `history_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `user` (`account`),
   ADD CONSTRAINT `history_ibfk_2` FOREIGN KEY (`recipient_id`) REFERENCES `user` (`account`);
 
 --
--- Ограничения внешнего ключа таблицы `states`
+-- Обмеження зовнішнього ключа таблиці `states`
 --
 ALTER TABLE `states`
   ADD CONSTRAINT `states_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`Id`),
   ADD CONSTRAINT `states_ibfk_2` FOREIGN KEY (`country_id`) REFERENCES `countries` (`Id`);
 
 --
--- Ограничения внешнего ключа таблицы `user`
+-- Обмеження зовнішнього ключа таблиці `user`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`Id`),

@@ -2,7 +2,13 @@
     session_start();
 
 if (isset($_SESSION['loggedin']) && session_status() == 2 && session_id() == $_SESSION["session_id"]) {
-    header('Location: ./blank.php');
+    if($_SESSION['role'] == 2){
+        header('Location: moder-home-page.php');
+    }elseif($_SESSION['role'] == 3){
+        header('Location: admin-home-page.php');
+    }else{
+        header('Location: user-home-page.php');
+    }
     exit;
 }
 ?>
@@ -11,7 +17,7 @@ if (isset($_SESSION['loggedin']) && session_status() == 2 && session_id() == $_S
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in (v2)</title>
+  <title>MonoBank | Log in</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">

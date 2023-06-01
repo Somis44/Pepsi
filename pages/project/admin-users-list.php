@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if($_SESSION['role'] != 3){
+    header('Location: login.php');
+}
+
 if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_SESSION['session_id']) {
     $_SESSION["error"] = "Please login";
     header('Location: login.php');
@@ -12,7 +16,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MonoBank | History</title>
+    <title>MonoBank | Users List</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -61,7 +65,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
             <!-- Sidebar user (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="../dist/img/user.png" class="img-circle elevation-2" alt="User Image">
+                    <img src="../dist/img/user.png" class="img-circle elevation-2" alt="User Image"">
                 </div>
                 <div class="info">
                     <a href="profile.php" class="d-block"><?php echo $_SESSION['firstName']," ",$_SESSION['lastName'];?></a>
@@ -90,6 +94,12 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="admin-users-list.php" class="nav-link">
+                            <i class="nav-icon fas fa-table text-danger"></i>
+                            <p class="text-danger">Users List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="../../scripts/logout.php" class="nav-link">
                             <i class="nav-icon far fa-circle text-danger"></i>
                             <p>Logout</p>
@@ -111,12 +121,12 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>History</h1>
+                        <h1>Users List</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">History</li>
+                            <li class="breadcrumb-item active">Users List</li>
                         </ol>
                     </div>
                 </div>

@@ -50,7 +50,7 @@ if ($stmt->num_rows > 0) {
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="blank.php" class="nav-link">Home</a>
+                <a href="user-home-page.php" class="nav-link">Home</a>
             </li>
         </ul>
 
@@ -69,7 +69,7 @@ if ($stmt->num_rows > 0) {
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="blank.php" class="brand-link">
+        <a href="user-home-page.php" class="brand-link">
             <img src="../dist/img/M-logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight">MONObank</span>
         </a>
@@ -90,7 +90,7 @@ if ($stmt->num_rows > 0) {
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item">
-                        <a href="blank.php" class="nav-link">
+                        <a href="user-home-page.php" class="nav-link">
                             <i class="nav-icon fas fa-book"></i>
                             <p>Home page</p>
                         </a>
@@ -212,29 +212,50 @@ if ($stmt->num_rows > 0) {
                     <div class="card-header">
                         <h3 class="card-title">Last activity</h3>
                     </div>
+
+                    <?php
+                    require_once "../../scripts/connect.php";
+                    $sql = "select CONCAT(u.firstName,' ',u.lastName) as sender,CONCAT(u2.firstName,' ',u2.lastName) as recipient , h.amount as amount, h.date as date from history h join user u on sender_id = u.account join user u2 on recipient_id = u2.account where u.id = $_SESSION[id] or u2.id = $_SESSION[id] limit 1;";
+                    $result = $conn->query($sql);
+
+                    if($result->num_rows==0){
+                        $lastR = "You don't have any transaction history yet";
+                        $lastS = "You don't have any transaction history yet";
+                        $DateO= "You don't have any transaction history yet";
+                        $AmountO = "You don't have any transaction history yet";
+                    }else {
+                        while ($user = $result->fetch_assoc()) {
+                            $lastR = $user["recipient"];
+                            $lastS = $user["sender"];
+                            $DateO = $user["date"];
+                            $AmountO = $user["amount"];
+                        }
+                    }
+
+                    ?>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <strong><i class="fas fa-user-clock mr-1"></i> Last receiver</strong>
 
-                        <p class="text-muted"> none </p>
+                        <p class="text-muted"><?php  echo $lastR ?></p>
 
                         <hr>
+
                         <strong><i class="fas fa-user-clock mr-1"></i> Last sender</strong>
 
-                        <p class="text-muted"> none </p>
+                        <p class="text-muted"><?php echo $lastS ?></p>
 
                         <hr>
 
                         <strong><i class="fas fa-clock mr-1"></i> Date of the last operation</strong>
 
-                        <p class="text-muted"> none </p>
+                        <p class="text-muted"><?php echo $DateO ?></p>
 
                         <hr>
 
                         <strong><i class="fas fa-money-bill mr-1"></i> Amount of last operation</strong>
 
-                        <p class="text-muted"> none </p>
-
+                        <p class="text-muted"><?php echo $AmountO ?></p>
 
                     </div>
                     <!-- /.card-body -->

@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if($_SESSION['role'] != 1){
+    header('Location: login.php');
+}
+
 if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_SESSION['session_id']) {
     $_SESSION["error"] = "Please login";
     header('Location: login.php');
@@ -12,7 +16,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MonoBank | Operations Page</title>
+  <title>MonoBank | Home Page</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -65,6 +69,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
         </div>
         <div class="info">
           <a href="profile.php" class="d-block"><?php echo $_SESSION['firstName']," ",$_SESSION['lastName'];?></a>
+            <a class="text-gray"> User </a>
         </div>
       </div>
 
@@ -111,12 +116,12 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Operations</h1>
+            <h1>Home page</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Operations</li>
+              <li class="breadcrumb-item active">Home Page</li>
             </ol>
           </div>
         </div>
@@ -129,7 +134,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
       <!-- Default box -->
       <div class="card card-primary">
         <div class="card-header">
-          <h3 class="card-title">Account Balance</h3>
+          <h3 class="card-title">Hello!</h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -137,102 +142,17 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
             </button>
           </div>
         </div>
-        <div class="card-body"> <i class="fas fa-user mr-2"></i>
-            <?php
-            require_once "../../scripts/connect.php";
-
-            $sql = "SELECT account from user where id = $_SESSION[id]";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                while($row = mysqli_fetch_assoc($result)){
-                    echo "Account ID: " . $row["account"];
-                    $_SESSION['account'] = $row["account"];
-                }
-            }else{
-                echo "0";
-            }
-            ?>
+        <div class="card-body">
+            Have a nice day!
         </div>
-          <div class="card-footer"> <i class="fas fa-money-bill mr-1"></i>
-              <?php
-              require_once "../../scripts/connect.php";
+          <div>
 
-              $sql = "SELECT balance from balance where account_id = $_SESSION[id]";
-              $result = $conn->query($sql);
-
-              if ($result->num_rows > 0) {
-                  while($row = mysqli_fetch_assoc($result)){
-                      echo "Balance: " . $row["balance"] . " $";
-                  }
-              }else{
-                  echo "0";
-              }
-              ?>
           </div>
         <!-- /.card-body -->
 
         <!-- /.card-footer-->
       </div>
       <!-- /.card -->
-
-        <?php
-        if(isset($_SESSION["success"])){
-            echo <<< SUCCESS
-                <div class="callout callout-success">
-                    <h5>Success!</h5>
-                    <p>$_SESSION[success]</p>
-                </div>
-            SUCCESS;
-            unset($_SESSION["success"]);
-        }
-        ?>
-
-        <?php
-        if(isset($_SESSION["error"])){
-            echo <<< SUCCESS
-                <div class="callout callout-danger">
-                    <h5>Error!</h5>
-                    <p>$_SESSION[error]</p>
-                </div>
-            SUCCESS;
-            unset($_SESSION["error"]);
-        }
-        ?>
-
-        <div class="card card-success">
-            <div class="card-header">
-                <h3 class="card-title">Money Transfer</h3>
-
-            </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form action="../../scripts/transfer.php" method="post">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Reciever Account</label>
-                        <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Enter account id" name="r-account">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Reciever Name</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name" name="r-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Amount</label>
-                        <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Enter amount" name="amount">
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1" name="check">
-                        <label class="form-check-label" for="exampleCheck1">Confirm the transaction</label>
-                    </div>
-                </div>
-                <!-- /.card-body -->
-
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-success">Submit</button>
-                </div>
-            </form>
-        </div>
 
     </section>
     <!-- /.content -->

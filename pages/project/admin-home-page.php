@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if($_SESSION['role'] != 3){
+    header('Location: login.php');
+}
+
 if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_SESSION['session_id']) {
     $_SESSION["error"] = "Please login";
     header('Location: login.php');
@@ -32,7 +36,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="blank.php" class="nav-link">Home</a>
+        <a href="user-home-page.php" class="nav-link">Home</a>
       </li>
     </ul>
 
@@ -51,7 +55,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="blank.php" class="brand-link">
+    <a href="user-home-page.php" class="brand-link">
         <img src="../dist/img/M-logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight">MONObank</span>
     </a>
@@ -65,6 +69,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
         </div>
         <div class="info">
           <a href="profile.php" class="d-block"><?php echo $_SESSION['firstName']," ",$_SESSION['lastName'];?></a>
+            <a class="text-gray"> Admin </a>
         </div>
       </div>
 
@@ -72,7 +77,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
-                <a href="blank.php" class="nav-link">
+                <a href="user-home-page.php" class="nav-link">
                     <i class="nav-icon fas fa-book"></i>
                     <p>Home page</p>
                 </a>
@@ -87,6 +92,12 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                 <a href="history.php" class="nav-link">
                     <i class="nav-icon fas fa-table"></i>
                     <p>History</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="admin-users-list.php" class="nav-link">
+                    <i class="nav-icon fas fa-table text-danger"></i>
+                    <p class="text-danger">Users List</p>
                 </a>
             </li>
             <li class="nav-item">

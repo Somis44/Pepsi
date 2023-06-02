@@ -107,6 +107,18 @@ if ($stmt->num_rows > 0) {
                             <p>History</p>
                         </a>
                     </li>
+                    <?php
+                    if($_SESSION['role'] == 3){
+                        echo <<< ADMINPAGES
+            <li class="nav-item">
+                <a href="admin-users-list.php" class="nav-link">
+                    <i class="nav-icon fas fa-users-cog text-danger"></i>
+                    <p class="text-danger">Users List</p>
+                </a>
+            </li>
+ADMINPAGES;
+                    }
+                    ?>
                     <li class="nav-item">
                         <a href="../../scripts/logout.php" class="nav-link">
                             <i class="nav-icon far fa-circle text-danger"></i>

@@ -10,28 +10,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>history.back();</script>";
         exit();
     }
-/*
-    echo "<p>" . $_POST['r-account'] . "</p>";
-    echo "<p>" . $_POST['r-name'] . "</p>";
-    echo "<p>" . $_POST['amount'] . "</p>";
-    echo "<p>" . $_POST['check'] . "</p>";
-    echo "<hr />";
-    echo "<p>" . $_SESSION['id'] . "</p>";
-    echo "<p>".$_SESSION['account']."</p>";
-    echo "<hr />";
-*/
 
     $senderbalance = $conn->query("SELECT balance FROM balance WHERE account_id = $_SESSION[id] ");
     while($row = $senderbalance->fetch_assoc()){
         $sbalance = $row['balance'];
     }
+
     if($sbalance < $_POST['amount']) {
         $_SESSION['error'] = "Your account does not have enough funds";
         echo "<script>history.back();</script>";
         exit();
     }
 
-    if ($stmt = $conn->prepare('select id, balance from user u left join balance on id = account_id where account = ?')) {
+    if ($stmt = $conn->prepare('select u.id, account_id, balance from user u left join balance on u.id = account_id where account = ?')) {
         // Bind parameters (s = string, i = int, b = blob, etc), in our case the username is a string so we use "s"
         $stmt->bind_param('s', $_POST['r-account']);
         $stmt->execute();
@@ -39,8 +30,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $balance);
+            $stmt->bind_result($id, $acc_id, $balance);
             $stmt->fetch();
+
+            if($balance == null){
+
+                $addB = $conn->prepare("INSERT INTO balance (`account_id`, `balance`) VALUES (?, ?);");
+
+                $startB = 0;
+
+                $addB->bind_param('ii', $id,$startB);
+
+                $addB->execute();
+
+                if ($stmt->affected_rows) {
+                    $_SESSION["error"] = "Account for reciever " . $_POST['r-name'] . " was added!";
+                }
+            }
+
 
             $newRbalance = $balance + $_POST['amount'];
 
@@ -53,18 +60,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $sql = "UPDATE balance SET balance = $newRbalance where account_id = $id";
             $conn->query($sql);
-            /*
             if ($conn->affected_rows == 1){
                 $_SESSION["success"] = "Transfer is succesfull!";
             }else{
+
                 $_SESSION["error"] = "Transfer failed!";
-            }*/
+                header("location: ../pages/project/operations.php");
+            }
+
             $sql = "UPDATE balance SET balance = $newSbalance where account_id = $_SESSION[id]";
             $conn->query($sql);
             if ($conn->affected_rows == 1){
                 $_SESSION["success"] = "Transfer is succesfull!";
             }else{
                 $_SESSION["error"] = "Transfer failed!";
+                header("location: ../pages/project/operations.php");
             }
 
             $history = $conn->prepare("INSERT INTO history (`sender_id`, `recipient_id`, `amount`) VALUES (?, ?, ?);");

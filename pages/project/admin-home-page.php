@@ -96,7 +96,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
             </li>
             <li class="nav-item">
                 <a href="admin-users-list.php" class="nav-link">
-                    <i class="nav-icon fas fa-table text-danger"></i>
+                    <i class="nav-icon fas fa-users-cog text-danger"></i>
                     <p class="text-danger">Users List</p>
                 </a>
             </li>

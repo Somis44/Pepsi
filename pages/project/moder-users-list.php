@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if($_SESSION['role'] != 3){
+if($_SESSION['role'] != 2){
     header('Location: login.php');
 }
 
@@ -69,7 +69,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                 </div>
                 <div class="info">
                     <a href="profile.php" class="d-block"><?php echo $_SESSION['firstName']," ",$_SESSION['lastName'];?></a>
-                    <a class="text-gray"> Admin </a>
+                    <a class="text-gray"> Moderator </a>
                 </div>
             </div>
 
@@ -95,21 +95,15 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="admin-users-list.php" class="nav-link">
-                            <i class="nav-icon fas fa-users-cog text-danger"></i>
-                            <p class="text-danger">Users List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="balance-all.php" class="nav-link">
-                            <i class="nav-icon fas fa-money-bill-wave text-danger"></i>
-                            <p class="text-danger">Users Balance</p>
+                        <a href="moder-users-list.php" class="nav-link">
+                            <i class="nav-icon fas fa-users-cog text-warning"></i>
+                            <p class="text-warning">Users List</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="history-all.php" class="nav-link">
-                            <i class="nav-icon fas fa-history text-danger"></i>
-                            <p class="text-danger">Transactions History</p>
+                            <i class="nav-icon fas fa-history text-warning"></i>
+                            <p class="text-warning">Transactions History</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -168,7 +162,6 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                             <th>Birthday</th>
                             <th>Created At</th>
                             <th></th>
-                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -192,8 +185,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                                 <td>$user[city]</td>
                                 <td>$user[birthday]</td>
                                 <td>$user[created]</td>
-                                <td><a href="./admin-users-list.php?userUpdateId=$user[id]"><button class="btn btn-primary">Update</button></a></td>
-                                <td><a href="./admin-users-list.php?userDeleteId=$user[id]"><button class="btn btn-danger">Delete</button></a></td>                     
+                                <td><a href="./moder-users-list.php?userUpdateId=$user[id]"><button class="btn btn-primary">Update</button></a></td>                  
                             </tr>
                         TABLEUSERS;
                         }
@@ -240,19 +232,19 @@ ERROR;
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="../../scripts/update-user.php" method="post">
+              <form action="../../scripts/moder-update-user.php" method="post">
                 <div class="card-body">
                 
                 <div class="form-group">
                   <label>Role</label>
-                  <select class="form-control select2bs4 select2-hidden-accessible" name="role_id" style="width: 100%;">
+                  <select class="form-control select2bs4 select2-hidden-accessible" name="role_id" style="width: 100%;" disabled>
 UPDATEUSER;
                 require_once "../../scripts/connect.php";
                 $sql ="SELECT * FROM roles";
                 $result = $conn->query($sql);
                 while($role = $result->fetch_assoc()) {
                     if($role["id"] == $upd_user["role_id"]){
-                        echo "<option value='$role[id]' selected>$role[role]</option>>";
+                        echo "<option value='$role[id]' selected>$role[role]</option>";
                     }else{
                         echo "<option value='$role[id]'>$role[role]</option>";
                     }
@@ -304,41 +296,11 @@ UPDATEUSER;
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
-                  <a href="./admin-users-list.php"><button type="button" class="btn btn-gray">Back</button></a>
+                  <a href="./moder-users-list.php"><button type="button" class="btn btn-gray">Back</button></a>
                 </div>
               </form>
             </div>
         UPDATEUSER;
-            }
-            ?>
-
-            <?php
-            if (isset($_GET["userDeleteId"])){
-                $_SESSION["userDeleteId"] = $_GET["userDeleteId"];
-                $sql = "SELECT firstName, lastName FROM user u WHERE u.id=$_GET[userDeleteId]";
-                $result = $conn->query($sql);
-                $del_user = $result->fetch_assoc();
-                echo <<< DELETEUSER
-            <div class="card card-danger">
-              <div class="card-header">
-                <h3 class="card-title">Delete User</h3>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-10">
-                  <p>Are you sure you want to delete $del_user[firstName] $del_user[lastName] ?</p>
-                  </div>
-
-                  <div class="col-2">
-                    <a href="../../scripts/delete-user.php"><button type="submit" class="btn btn-primary">Yes, I'm sure</button></a>
-                    <a href="./admin-users-list.php"><button type="submit" class="btn btn-gray">No, I don't</button></a>
-                  </div>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-DELETEUSER;
-
             }
             ?>
 

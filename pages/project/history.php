@@ -65,6 +65,7 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                 </div>
                 <div class="info">
                     <a href="profile.php" class="d-block"><?php echo $_SESSION['firstName']," ",$_SESSION['lastName'];?></a>
+                    <?php if($_SESSION['role'] == 2) {echo "<a class=text-gray> Moderator </a>";}elseif ($_SESSION['role'] == 3) {echo "<a class=text-gray> Admin </a>";}else{echo "<a class=text-gray> User </a>";}?>
                 </div>
             </div>
 
@@ -98,7 +99,35 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                     <p class="text-danger">Users List</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="balance-all.php" class="nav-link">
+                    <i class="nav-icon fas fa-money-bill-wave text-danger"></i>
+                    <p class="text-danger">Users Balance</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="history-all.php" class="nav-link">
+                    <i class="nav-icon fas fa-history text-danger"></i>
+                    <p class="text-danger">Transactions History</p>
+                </a>
+            </li>
 ADMINPAGES;
+                    }
+                    if($_SESSION['role'] == 2){
+                        echo <<< MODERPAGES
+            <li class="nav-item">
+                <a href="moder-users-list.php" class="nav-link">
+                    <i class="nav-icon fas fa-users-cog text-warning"></i>
+                    <p class="text-warning">Users List</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="history-all.php" class="nav-link">
+                    <i class="nav-icon fas fa-history text-warning"></i>
+                    <p class="text-warning">Transactions History</p>
+                </a>
+            </li>
+MODERPAGES;
                     }
                     ?>
                     <li class="nav-item">
@@ -163,7 +192,7 @@ ADMINPAGES;
 
                         <?php
                         require_once "../../scripts/connect.php";
-                        $sql = "select h.id as hid, CONCAT(u.firstName,' ',u.lastName) as sender, h.sender_id as hsender_id,CONCAT(u2.firstName,' ',u2.lastName) as recipient ,h.recipient_id as hrecipient_id, h.amount as amount, h.date as date from history h join user u on sender_id = u.account join user u2 on recipient_id = u2.account where u.id = $_SESSION[id] or u2.id = $_SESSION[id];";
+                        $sql = "select h.id as hid, CONCAT(u.firstName,' ',u.lastName) as sender, h.sender_id as hsender_id,CONCAT(u2.firstName,' ',u2.lastName) as recipient ,h.recipient_id as hrecipient_id, h.amount as amount, h.date as date from history h join user u on sender_id = u.account join user u2 on recipient_id = u2.account where u.id = $_SESSION[id] or u2.id = $_SESSION[id] order by date desc;";
                         $result = $conn->query($sql);
 
                         if($result->num_rows==0){
@@ -177,7 +206,7 @@ ADMINPAGES;
                                 <td>$user[hsender_id]</td>
                                 <td>$user[recipient]</td>
                                 <td>$user[hrecipient_id]</td>
-                                <td>$user[amount]</td>
+                                <td>$user[amount] $</td>
                                 <td>$user[date]</td>
                             </tr>
                         TABLEUSERS;

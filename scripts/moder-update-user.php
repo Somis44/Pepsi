@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-    $sql = "UPDATE `user` SET `city_id` = '$_POST[city_id]', `role_id` = '$_POST[role_id]', `email` = '$_POST[email]', `firstName` = '$_POST[firstName]', `lastName` = '$_POST[lastName]', `birthday` = '$_POST[birthday]' WHERE `user`.`id` = $_SESSION[userUpdateId];";
+    $sql = "UPDATE `user` SET `city_id` = '$_POST[city_id]', `email` = '$_POST[email]', `firstName` = '$_POST[firstName]', `lastName` = '$_POST[lastName]', `birthday` = '$_POST[birthday]' WHERE `user`.`id` = $_SESSION[userUpdateId];";
     $conn->query($sql);
 
     if ($conn->affected_rows == 1){

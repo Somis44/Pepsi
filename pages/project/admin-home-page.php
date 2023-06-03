@@ -101,6 +101,18 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                 </a>
             </li>
             <li class="nav-item">
+                <a href="balance-all.php" class="nav-link">
+                    <i class="nav-icon fas fa-money-bill-wave text-danger"></i>
+                    <p class="text-danger">Users Balance</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="history-all.php" class="nav-link">
+                    <i class="nav-icon fas fa-history text-danger"></i>
+                    <p class="text-danger">Transactions History</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="../../scripts/logout.php" class="nav-link">
                     <i class="nav-icon far fa-circle text-danger"></i>
                     <p>Logout</p>

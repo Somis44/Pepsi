@@ -6,6 +6,13 @@ session_start();
 if($_SESSION['role'] != 3) {
     $_SESSION["error"] = "How you even got where?";
     header("location: ../pages/project/admin-users-list.php");
+    exit();
+}
+
+if($_SESSION['id'] == $_SESSION['userDeleteId']){
+    $_SESSION["error"] = "You can't delete yourself!";
+    header("location: ../pages/project/admin-users-list.php");
+    exit();
 }
 
 require_once "connect.php";

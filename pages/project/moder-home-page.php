@@ -95,6 +95,18 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
                 </a>
             </li>
             <li class="nav-item">
+                <a href="moder-users-list.php" class="nav-link">
+                    <i class="nav-icon fas fa-users-cog text-warning"></i>
+                    <p class="text-warning">Users List</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="history-all.php" class="nav-link">
+                    <i class="nav-icon fas fa-history text-warning"></i>
+                    <p class="text-warning">Transactions History</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="../../scripts/logout.php" class="nav-link">
                     <i class="nav-icon far fa-circle text-danger"></i>
                     <p>Logout</p>

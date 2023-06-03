@@ -7,22 +7,8 @@ if (!isset($_SESSION['loggedin']) || session_status() != 2 || session_id() != $_
     exit;
 }
 
-require_once "../../scripts/connect.php";
-
-
-$stmt = $conn->prepare('select r.role,c.city,s.state,c2.country,u.account,u.birthday,u.created_at from user u join roles r on u.role_id = r.id join cities c on u.city_id = c.id join states s on c.state_id = s.id join countries c2 on s.country_id = c2.id where u.id = ?;');
-    // Bind parameters (s = string, i = int, b = blob, etc), in our case the username is a string so we use "s"
-$stmt->bind_param('s', $_SESSION['id']);
-$stmt->execute();
-// Store the result so we can check if the account exists in the database.
-$stmt->store_result();
-
-if ($stmt->num_rows > 0) {
-    $stmt->bind_result($role,$city, $state, $country,$account, $birthday, $created_at);
-    $stmt->fetch();
-
-    $formattedBirth = date("d F Y", strtotime($birthday));
-    $formattedCreated = date("H:i d F Y", strtotime($created_at));
+if($_SESSION['role'] == 1){
+    header('Location: login.php');
 }
 ?>
 <!DOCTYPE html>
@@ -30,7 +16,7 @@ if ($stmt->num_rows > 0) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MonoBank | Profile Page</title>
+    <title>MonoBank | Transactions history</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -154,6 +140,8 @@ MODERPAGES;
                             <p>Logout</p>
                         </a>
                     </li>
+
+
                 </ul>
 
 
@@ -170,145 +158,70 @@ MODERPAGES;
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Profile</h1>
+                        <h1>Transactions history</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Profile</li>
+                            <li class="breadcrumb-item active">Transactions history</li>
                         </ol>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
-<div class = "container-fluid">
-    <div class = "row">
-            <div class="col-md-5">
-
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle" src="../dist/img/user-dark.png" alt="User profile picture">
-                        </div>
-
-                        <h3 class="profile-username text-center"> <?php echo $_SESSION['firstName']," ",$_SESSION['lastName'];?></h3>
-
-                        <p class="text-muted text-center"><?php echo $role; ?></p>
-
-                        <ul class="list-group list-group-unbordered mb-3">
-                            <li class="list-group-item">
-                                <b><i class="fas fa-user mr-2"></i> Account ID <a class="float-right"><?php echo $account; ?></a></b>
-                            </li>
-                            <li class="list-group-item">
-                                <b><i class="fas fa-map-marker-alt mr-2"></i> Address</b> <a class="float-right"><?php echo $city . " / " . $state . " / " . $country ?></a>
-                            </li>
-                            <li class="list-group-item">
-                                <b><i class="fas fa-mail-bulk mr-2"></i>Email</b> <a class="float-right"><?php echo $_SESSION['email'];?></a>
-                            </li>
-                            <li class="list-group-item">
-                                <b><i class="fas fa-birthday-cake mr-2"></i>Birthday</b> <a class="float-right"><?php echo $formattedBirth; ?></a>
-                            </li>
-                            <li class="list-group-item">
-                                <b><i class="fas fa-tools mr-2"></i>Account created at</b> <a class="float-right"><?php echo $formattedCreated; ?></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <div class="col-md-7">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Account Balance</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <strong><i class="fas fa-money-bill mr-1"></i> Balance</strong>
-                        <p class="text-muted">
-                        <?php
-                        require_once "../../scripts/connect.php";
-
-                        $sql = "SELECT balance from balance where account_id = $_SESSION[id]";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            while($row = mysqli_fetch_assoc($result)){
-                                echo $row["balance"] . " $";
-                            }
-                        }else{
-                            echo "0";
-                        }
-                        ?></p>
-                    </div>
-                </div>
-
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Last activity</h3>
-                    </div>
-
-                    <?php
-                    require_once "../../scripts/connect.php";
-                    $sql = "select CONCAT(u.firstName,' ',u.lastName) as sender,CONCAT(u2.firstName,' ',u2.lastName) as recipient , h.amount as amount, h.date as date from history h join user u on sender_id = u.account join user u2 on recipient_id = u2.account where u.id = $_SESSION[id] or u2.id = $_SESSION[id] limit 1;";
-                    $result = $conn->query($sql);
-
-                    if($result->num_rows==0){
-                        $lastR = "You don't have any transaction history yet";
-                        $lastS = "You don't have any transaction history yet";
-                        $DateO= "You don't have any transaction history yet";
-                        $AmountO = "You don't have any transaction history yet";
-                    }else {
-                        while ($user = $result->fetch_assoc()) {
-                            $lastR = $user["recipient"];
-                            $lastS = $user["sender"];
-                            $DateO = $user["date"];
-                            $AmountO = $user["amount"];
-                        }
-                    }
-
-                    ?>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <strong><i class="fas fa-user-clock mr-1"></i> Last receiver</strong>
-
-                        <p class="text-muted"><?php  echo $lastR ?></p>
-
-                        <hr>
-
-                        <strong><i class="fas fa-user-clock mr-1"></i> Last sender</strong>
-
-                        <p class="text-muted"><?php echo $lastS ?></p>
-
-                        <hr>
-
-                        <strong><i class="fas fa-clock mr-1"></i> Date of the last operation</strong>
-
-                        <p class="text-muted"><?php echo $DateO ?></p>
-
-                        <hr>
-
-                        <strong><i class="fas fa-money-bill mr-1"></i> Amount of last operation</strong>
-
-                        <p class="text-muted"><?php echo $AmountO ?></p>
-
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-</div>
-</div>
         </section>
 
         <!-- Main content -->
         <section class="content">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Transactions history</h3>
+
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 725px;">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sender</th>
+                            <th>Sender_ID</th>
+                            <th>Recipient</th>
+                            <th>Recipient_ID</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php
+                        require_once "../../scripts/connect.php";
+                        $sql = "select h.id as hid, CONCAT(u.firstName,' ',u.lastName) as sender, h.sender_id as hsender_id,CONCAT(u2.firstName,' ',u2.lastName) as recipient ,h.recipient_id as hrecipient_id, h.amount as amount, h.date as date from history h join user u on sender_id = u.account join user u2 on recipient_id = u2.account order by date desc;";
+                        $result = $conn->query($sql);
+
+                        if($result->num_rows==0){
+                            echo "<tr><td colspan='6'>You don't have any transaction history yet</td></tr>";
+                        }else {
+                            while ($user = $result->fetch_assoc()) {
+                                echo <<< TABLEUSERS
+                            <tr>
+                                <td>$user[hid]</td>
+                                <td>$user[sender]</td>
+                                <td>$user[hsender_id]</td>
+                                <td>$user[recipient]</td>
+                                <td>$user[hrecipient_id]</td>
+                                <td>$user[amount] $</td>
+                                <td>$user[date]</td>
+                            </tr>
+                        TABLEUSERS;
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
 
         </section>
         <!-- /.content -->
